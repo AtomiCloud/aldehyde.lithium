@@ -1,0 +1,91 @@
+atomi/helm:
+  active: true
+  history:
+    - version: 4
+      time: 2025-09-20T11:55:46.284111Z
+      answers:
+        atomi/helm/deployment:
+          type: Bool
+          value: true
+        layer:
+          type: String
+          value: '2'
+        platform:
+          type: String
+          value: aldehyde
+        module:
+          type: String
+          value: core
+        desc:
+          type: String
+          value: Helm Chart to deploy Logto as Auth System
+        service:
+          type: String
+          value: lithium
+      deterministic_states: {}
+    - version: 5
+      time: 2025-09-20T12:16:18.240276Z
+      answers:
+        platform:
+          type: String
+          value: aldehyde
+        atomi/helm/deployment:
+          type: Bool
+          value: true
+        desc:
+          type: String
+          value: Helm Chart to deploy Logto as Auth System
+        module:
+          type: String
+          value: core
+        service:
+          type: String
+          value: lithium
+        layer:
+          type: String
+          value: '2'
+      deterministic_states: {}
+atomi/nix-init:
+  active: true
+  history:
+    - version: 14
+      time: 2025-09-20T08:11:55.168525Z
+      answers:
+        pre-commit:
+          type: Bool
+          value: true
+        standard-binary:
+          type: Bool
+          value: true
+        init-type:
+          type: String
+          value: Standard
+        Description of this Project:
+          type: String
+          value: aldehyde lithium Helm Chart
+      deterministic_states: {}
+atomi/workspace:
+  active: true
+  history:
+    - version: 21
+      time: 2025-09-20T08:13:01.248376Z
+      answers:
+        atomi/workspace/enable-helm:
+          type: Bool
+          value: true
+        atomi/workspace/runtime:
+          type: String
+          value: None
+        atomi/workspace/service:
+          type: String
+          value: lithium
+        atomi/workspace/platform:
+          type: String
+          value: aldehyde
+        atomi/workspace/enable-secret:
+          type: Bool
+          value: false
+        atomi/workspace/enable-docker:
+          type: Bool
+          value: false
+      deterministic_states: {}
