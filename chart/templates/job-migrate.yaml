@@ -1,0 +1,35 @@
+{{- if .Values.migrations.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "aldehyde-lithium.fullname-with-suffix" (dict "root" . "arg" "migrate") }}
+  labels:
+    {{- include "aldehyde-lithium.labels" . | nindent 4 }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "{{ .Values.syncWaves.migrationJob | default "5" }}"
+    # Argo CD considers a Job healthy when it completes; next wave proceeds then.
+spec:
+  backoffLimit: {{ .Values.migrations.backoffLimit | default 3 }}
+  template:
+    metadata:
+      labels:
+        {{- include "aldehyde-lithium.labels" . | nindent 8 }}
+    spec:
+      restartPolicy: OnFailure
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "aldehyde-lithium.serviceAccountName" . }}
+      containers:
+        - name: migrate
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["sh", "-lc"]
+          args: ["npm run cli db alt deploy"]
+          envFrom:
+            - configMapRef:
+                name: {{ include "aldehyde-lithium.fullname" . }}-app
+            - secretRef:
+                name: {{ default (printf "%s-app" (include "aldehyde-lithium.fullname" .)) .Values.secrets.nameOverride }}
+{{- end }}

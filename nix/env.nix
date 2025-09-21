@@ -14,6 +14,8 @@ with packages;
   main = [
     infisical
     skopeo
+    jq
+    curl
   ];
 
   lint = [

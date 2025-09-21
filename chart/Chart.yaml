@@ -9,4 +9,5 @@ appVersion: '0.1.0'
 dependencies:
   - name: dragonfly
     version: v1.31.2
+    alias: maincache
     repository: oci://ghcr.io/dragonflydb/dragonfly/helm

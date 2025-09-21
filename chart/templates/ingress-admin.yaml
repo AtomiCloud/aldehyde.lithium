@@ -1,22 +1,22 @@
-{{- if .Values.ingress.enabled -}}
+{{- if .Values.adminIngress.enabled -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "aldehyde-lithium.fullname" . }}
+  name: {{ include "aldehyde-lithium.fullname-with-suffix" (dict "root" . "arg" "admin") }}
   labels:
     {{- include "aldehyde-lithium.labels" . | nindent 4 }}
   annotations:
     argocd.argoproj.io/sync-wave: "{{ .Values.syncWaves.ingress | default "8" }}"
-    {{- with .Values.ingress.annotations }}
+    {{- with .Values.adminIngress.annotations }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
 spec:
-  {{- with .Values.ingress.className }}
+  {{- with .Values.adminIngress.className }}
   ingressClassName: {{ . }}
   {{- end }}
-  {{- if .Values.ingress.tls }}
+  {{- if .Values.adminIngress.tls }}
   tls:
-    {{- range .Values.ingress.tls }}
+    {{- range .Values.adminIngress.tls }}
     - hosts:
         {{- range .hosts }}
         - {{ . | quote }}
@@ -25,7 +25,7 @@ spec:
     {{- end }}
   {{- end }}
   rules:
-    {{- range .Values.ingress.hosts }}
+    {{- range .Values.adminIngress.hosts }}
     - host: {{ .host | quote }}
       http:
         paths:
@@ -38,7 +38,8 @@ spec:
               service:
                 name: {{ include "aldehyde-lithium.fullname" $ }}
                 port:
-                  number: {{ $.Values.service.ports.http }}
+                  number: {{ $.Values.service.ports.admin }}
           {{- end }}
     {{- end }}
 {{- end }}
+

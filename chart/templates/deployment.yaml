@@ -4,6 +4,8 @@ metadata:
   name: {{ include "aldehyde-lithium.fullname" . }}
   labels:
     {{ include "aldehyde-lithium.labels" . | nindent 4 }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "{{ .Values.syncWaves.deployment | default "6" }}"
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
@@ -37,8 +39,16 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: {{ .Values.service.containerPort }}
+              containerPort: {{ .Values.service.containerPorts.http }}
               protocol: TCP
+            - name: admin
+              containerPort: {{ .Values.service.containerPorts.admin }}
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: {{ include "aldehyde-lithium.fullname" . }}-app
+            - secretRef:
+                name: {{ default (printf "%s-app" (include "aldehyde-lithium.fullname" .)) .Values.secrets.nameOverride }}
           {{- with .Values.livenessProbe }}
           livenessProbe:
             {{- toYaml . | nindent 12 }}
@@ -51,14 +61,7 @@ spec:
           resources:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- with .Values.volumeMounts }}
-          volumeMounts:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
-      {{- with .Values.volumes }}
-      volumes:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+          # no additional volume mounts
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

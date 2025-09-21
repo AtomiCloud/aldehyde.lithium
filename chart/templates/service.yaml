@@ -3,11 +3,17 @@ kind: Service
 metadata:
   name: {{ include "aldehyde-lithium.fullname" . }}
   labels: {{- include "aldehyde-lithium.labels" . | nindent 4 }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "{{ .Values.syncWaves.service | default "7" }}"
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - port: {{ .Values.service.port }}
+    - name: http
+      port: {{ .Values.service.ports.http }}
       targetPort: http
       protocol: TCP
-      name: http
+    - name: admin
+      port: {{ .Values.service.ports.admin }}
+      targetPort: admin
+      protocol: TCP
   selector: {{- include "aldehyde-lithium.selectorLabels" . | nindent 4 }}

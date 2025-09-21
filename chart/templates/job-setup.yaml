@@ -1,0 +1,35 @@
+{{- if .Values.preSetup.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "aldehyde-lithium.fullname-with-suffix" (dict "root" . "arg" "setup") }}
+  labels:
+    {{- include "aldehyde-lithium.labels" . | nindent 4 }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "{{ .Values.syncWaves.setupJob | default "4" }}"
+    # Argo CD waits for Job completion before advancing waves.
+spec:
+  backoffLimit: {{ .Values.preSetup.backoffLimit | default 3 }}
+  template:
+    metadata:
+      labels:
+        {{- include "aldehyde-lithium.labels" . | nindent 8 }}
+    spec:
+      restartPolicy: OnFailure
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "aldehyde-lithium.serviceAccountName" . }}
+      containers:
+        - name: setup
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["sh", "-lc"]
+          args: ["npm run cli db seed -- --swe"]
+          envFrom:
+            - configMapRef:
+                name: {{ include "aldehyde-lithium.fullname" . }}-app
+            - secretRef:
+                name: {{ default (printf "%s-app" (include "aldehyde-lithium.fullname" .)) .Values.secrets.nameOverride }}
+{{- end }}

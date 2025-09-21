@@ -5,6 +5,8 @@ metadata:
   name: {{ include "aldehyde-lithium.fullname" . }}
   labels:
     {{- include "aldehyde-lithium.labels" . | nindent 4 }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "{{ .Values.syncWaves.deployment | default "6" }}"
 spec:
   scaleTargetRef:
     apiVersion: apps/v1

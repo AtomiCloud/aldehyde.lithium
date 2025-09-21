@@ -8,35 +8,29 @@ Helm Chart to deploy Logto as Auth System
 
 | Repository | Name | Version |
 |------------|------|---------|
-| oci://ghcr.io/dragonflydb/dragonfly/helm | dragonfly | v1.31.2 |
+| oci://ghcr.io/dragonflydb/dragonfly/helm | maincache(dragonfly) | v1.31.2 |
 
 ## Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+| adminIngress.className | string | `"traefik"` |  |
+| adminIngress.enabled | bool | `false` |  |
+| adminIngress.hosts[0].host | string | `nil` |  |
+| adminIngress.hosts[0].paths[0].path | string | `"/"` |  |
+| adminIngress.hosts[0].paths[0].pathType | string | `"ImplementationSpecific"` |  |
+| adminIngress.tls | list | `[]` |  |
 | affinity | object | `{}` |  |
+| app.adminEndpoint | string | `""` |  |
+| app.endpoint | string | `""` |  |
+| app.trustProxyHeader | int | `1` |  |
 | autoscaling.enabled | bool | `false` |  |
 | autoscaling.maxReplicas | int | `100` |  |
 | autoscaling.minReplicas | int | `1` |  |
 | autoscaling.targetCPUUtilizationPercentage | int | `80` |  |
-| dragonfly.podSecurityContext.fsGroup | int | `1000` |  |
-| dragonfly.podSecurityContext.runAsGroup | int | `1000` |  |
-| dragonfly.podSecurityContext.runAsNonRoot | bool | `true` |  |
-| dragonfly.podSecurityContext.runAsUser | int | `1000` |  |
-| dragonfly.resources.limits.cpu | string | `"100m"` |  |
-| dragonfly.resources.limits.memory | string | `"256Mi"` |  |
-| dragonfly.resources.requests.cpu | string | `"250m"` |  |
-| dragonfly.resources.requests.memory | string | `"512Mi"` |  |
-| dragonfly.securityContext.allowPrivilegeEscalation | bool | `false` |  |
-| dragonfly.securityContext.capabilities.drop[0] | string | `"ALL"` |  |
-| dragonfly.securityContext.readOnlyRootFilesystem | bool | `true` |  |
-| dragonfly.securityContext.runAsGroup | int | `3000` |  |
-| dragonfly.securityContext.runAsNonRoot | bool | `true` |  |
-| dragonfly.securityContext.runAsUser | int | `1000` |  |
-| dragonfly.storage.enabled | bool | `false` |  |
 | fullnameOverride | string | `""` |  |
 | image.pullPolicy | string | `"IfNotPresent"` |  |
-| image.repository | string | `"nginx"` |  |
+| image.repository | string | `"ghcr.io/logto-io/logto"` |  |
 | image.tag | string | `""` |  |
 | imagePullSecrets | list | `[]` |  |
 | ingress.className | string | `"traefik"` |  |
@@ -47,19 +41,55 @@ Helm Chart to deploy Logto as Auth System
 | ingress.tls | list | `[]` |  |
 | livenessProbe.httpGet.path | string | `"/"` |  |
 | livenessProbe.httpGet.port | string | `"http"` |  |
+| maincache.podSecurityContext.fsGroup | int | `1000` |  |
+| maincache.podSecurityContext.runAsGroup | int | `1000` |  |
+| maincache.podSecurityContext.runAsNonRoot | bool | `true` |  |
+| maincache.podSecurityContext.runAsUser | int | `1000` |  |
+| maincache.resources.limits.cpu | string | `"100m"` |  |
+| maincache.resources.limits.memory | string | `"256Mi"` |  |
+| maincache.resources.requests.cpu | string | `"250m"` |  |
+| maincache.resources.requests.memory | string | `"512Mi"` |  |
+| maincache.securityContext.allowPrivilegeEscalation | bool | `false` |  |
+| maincache.securityContext.capabilities.drop[0] | string | `"ALL"` |  |
+| maincache.securityContext.readOnlyRootFilesystem | bool | `true` |  |
+| maincache.securityContext.runAsGroup | int | `3000` |  |
+| maincache.securityContext.runAsNonRoot | bool | `true` |  |
+| maincache.securityContext.runAsUser | int | `1000` |  |
+| maincache.storage.enabled | bool | `false` |  |
+| migrations.backoffLimit | int | `3` |  |
+| migrations.enabled | bool | `true` |  |
 | nameOverride | string | `""` |  |
 | nodeSelector | object | `{}` |  |
+| oidc.rotate.backoffLimit | int | `0` |  |
+| oidc.rotate.cookieKeys | bool | `false` |  |
+| oidc.rotate.enabled | bool | `false` |  |
+| oidc.rotate.schedule | string | `"0 0 * * *"` |  |
+| oidc.rotate.type | string | `"ec"` |  |
 | podSecurityContext | object | `{"fsGroup":1000,"runAsGroup":1000,"runAsNonRoot":true,"runAsUser":1000}` | YAML Anchor for PodSecurityContext |
+| preSetup | object | `{"backoffLimit":3,"enabled":true}` | - Pre-setup and migration Jobs (run before Deployment) |
 | readinessProbe.httpGet.path | string | `"/"` |  |
 | readinessProbe.httpGet.port | string | `"http"` |  |
-| replicaCount | int | `1` |  |
+| replicaCount | int | `3` |  |
 | resources.limits.cpu | string | `"100m"` |  |
 | resources.limits.memory | string | `"128Mi"` |  |
 | resources.requests.cpu | string | `"100m"` |  |
 | resources.requests.memory | string | `"128Mi"` |  |
+| s3.config.bucket | string | `""` |  |
+| s3.config.endpoint | string | `""` |  |
+| s3.config.region | string | `""` |  |
+| s3.config.storageType | string | `"s3"` |  |
+| secrets.create | bool | `true` |  |
+| secrets.data.DB_URL | string | `""` |  |
+| secrets.data.JWT_SECRET | string | `""` |  |
+| secrets.data.REDIS_URL | string | `""` |  |
+| secrets.data.S3_ACCESS_KEY_ID | string | `""` |  |
+| secrets.data.S3_SECRET_ACCESS_KEY | string | `""` |  |
+| secrets.nameOverride | string | `""` |  |
 | securityContext | object | `{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"readOnlyRootFilesystem":true,"runAsGroup":3000,"runAsNonRoot":true,"runAsUser":1000}` | YAML Anchor for SecurityContext |
-| service.containerPort | int | `80` |  |
-| service.port | int | `80` |  |
+| service.containerPorts.admin | int | `3002` |  |
+| service.containerPorts.http | int | `3001` |  |
+| service.ports.admin | int | `3002` |  |
+| service.ports.http | int | `80` |  |
 | service.type | string | `"ClusterIP"` |  |
 | serviceAccount.automount | bool | `true` |  |
 | serviceAccount.create | bool | `true` |  |
@@ -67,13 +97,12 @@ Helm Chart to deploy Logto as Auth System
 | serviceTree.module | string | `"core"` |  |
 | serviceTree.platform | string | `"aldehyde"` |  |
 | serviceTree.service | string | `"lithium"` |  |
+| syncWaves | object | `{"configmap":"3","deployment":"6","ingress":"6","migrationJob":"5","service":"6","setupJob":"4"}` | - Argo CD Sync Waves to orchestrate ordering |
 | tags."atomi.cloud/layer" | string | `"2"` |  |
 | tags."atomi.cloud/module" | string | `"core"` |  |
 | tags."atomi.cloud/platform" | string | `"aldehyde"` |  |
 | tags."atomi.cloud/service" | string | `"lithium"` |  |
 | tolerations | list | `[]` |  |
-| volumeMounts | list | `[]` |  |
-| volumes | list | `[]` |  |
 
 ----------------------------------------------
 Autogenerated from chart metadata using [helm-docs v1.14.2](https://github.com/norwoodj/helm-docs/releases/v1.14.2)

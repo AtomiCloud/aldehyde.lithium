@@ -22,6 +22,8 @@ let
       {
         inherit
           git
+          jq
+          curl
           infisical
           treefmt
           gitlint

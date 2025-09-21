@@ -1,0 +1,40 @@
+{{- if .Values.oidc.rotate.enabled }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "aldehyde-lithium.fullname-with-suffix" (dict "root" . "arg" "rotate-keys") }}
+  labels:
+    {{- include "aldehyde-lithium.labels" . | nindent 4 }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "{{ .Values.syncWaves.migrationJob | default "5" }}"
+spec:
+  schedule: {{ .Values.oidc.rotate.schedule | default "0 0 * * *" | quote }}
+  jobTemplate:
+    spec:
+      backoffLimit: {{ .Values.oidc.rotate.backoffLimit | default 0 }}
+      template:
+        metadata:
+          labels:
+            {{- include "aldehyde-lithium.labels" . | nindent 12 }}
+        spec:
+          restartPolicy: OnFailure
+          {{- with .Values.imagePullSecrets }}
+          imagePullSecrets:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          serviceAccountName: {{ include "aldehyde-lithium.serviceAccountName" . }}
+          containers:
+            - name: rotate
+              image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+              imagePullPolicy: {{ .Values.image.pullPolicy }}
+              command: ["sh", "-lc"]
+              args:
+                - >-
+                  npm run cli db config rotate privateKeys -- --type {{ .Values.oidc.rotate.type | default "ec" }}
+                  {{- if .Values.oidc.rotate.cookieKeys }} && npm run cli db config rotate cookieKeys {{- end }}
+              envFrom:
+                - configMapRef:
+                    name: {{ include "aldehyde-lithium.fullname" . }}-app
+                - secretRef:
+                    name: {{ default (printf "%s-app" (include "aldehyde-lithium.fullname" .)) .Values.secrets.nameOverride }}
+{{- end }}
