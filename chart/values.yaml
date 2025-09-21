@@ -10,7 +10,6 @@ tags: &tags
   atomi.cloud/layer: *layer
   atomi.cloud/module: *module
 
-# <%= if (security) { %>
 # -- YAML Anchor for PodSecurityContext
 podSecurityContext: &podSecurityContext
   runAsUser: 1000
@@ -28,9 +27,10 @@ securityContext: &securityContext
   capabilities:
     drop:
       - ALL
-# <%= } %>
-
-# <%= if (deployment) { %>
+#
+serviceAccount:
+  create: true
+  automount: true
 
 # This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/
 image:
@@ -38,7 +38,7 @@ image:
   pullPolicy: IfNotPresent
   tag: ''
 
-imagePullSecrets: []
+imagePullSecrets: [ ]
 nameOverride: ''
 fullnameOverride: ''
 
@@ -57,7 +57,7 @@ ingress:
       paths:
         - path: /
           pathType: ImplementationSpecific
-  tls: []
+  tls: [ ]
 
 resources:
   limits:
@@ -87,21 +87,35 @@ autoscaling:
   # targetMemoryUtilizationPercentage: 80
 
 # Additional volumes on the output Deployment definition.
-volumes: []
+volumes: [ ]
 # - name: foo
 #   secret:
 #     secretName: mysecret
 #     optional: false
 
 # Additional volumeMounts on the output Deployment definition.
-volumeMounts: []
+volumeMounts: [ ]
 # - name: foo
 #   mountPath: "/etc/foo"
 #   readOnly: true
 
-nodeSelector: {}
+nodeSelector: { }
 
-tolerations: []
+tolerations: [ ]
 
-affinity: {}
-# <%= } %>
+affinity: { }
+
+dragonfly:
+  podSecurityContext: *podSecurityContext
+  securityContext: *securityContext
+
+  storage:
+    enabled: false
+
+  resources:
+    limits:
+      memory: 256Mi
+      cpu: 100m
+    requests:
+      memory: 512Mi
+      cpu: 250m

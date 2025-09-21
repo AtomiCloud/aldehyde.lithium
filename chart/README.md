@@ -4,6 +4,12 @@
 
 Helm Chart to deploy Logto as Auth System
 
+## Requirements
+
+| Repository | Name | Version |
+|------------|------|---------|
+| oci://ghcr.io/dragonflydb/dragonfly/helm | dragonfly | v1.31.2 |
+
 ## Values
 
 | Key | Type | Default | Description |
@@ -13,6 +19,21 @@ Helm Chart to deploy Logto as Auth System
 | autoscaling.maxReplicas | int | `100` |  |
 | autoscaling.minReplicas | int | `1` |  |
 | autoscaling.targetCPUUtilizationPercentage | int | `80` |  |
+| dragonfly.podSecurityContext.fsGroup | int | `1000` |  |
+| dragonfly.podSecurityContext.runAsGroup | int | `1000` |  |
+| dragonfly.podSecurityContext.runAsNonRoot | bool | `true` |  |
+| dragonfly.podSecurityContext.runAsUser | int | `1000` |  |
+| dragonfly.resources.limits.cpu | string | `"100m"` |  |
+| dragonfly.resources.limits.memory | string | `"256Mi"` |  |
+| dragonfly.resources.requests.cpu | string | `"250m"` |  |
+| dragonfly.resources.requests.memory | string | `"512Mi"` |  |
+| dragonfly.securityContext.allowPrivilegeEscalation | bool | `false` |  |
+| dragonfly.securityContext.capabilities.drop[0] | string | `"ALL"` |  |
+| dragonfly.securityContext.readOnlyRootFilesystem | bool | `true` |  |
+| dragonfly.securityContext.runAsGroup | int | `3000` |  |
+| dragonfly.securityContext.runAsNonRoot | bool | `true` |  |
+| dragonfly.securityContext.runAsUser | int | `1000` |  |
+| dragonfly.storage.enabled | bool | `false` |  |
 | fullnameOverride | string | `""` |  |
 | image.pullPolicy | string | `"IfNotPresent"` |  |
 | image.repository | string | `"nginx"` |  |
@@ -40,6 +61,8 @@ Helm Chart to deploy Logto as Auth System
 | service.containerPort | int | `80` |  |
 | service.port | int | `80` |  |
 | service.type | string | `"ClusterIP"` |  |
+| serviceAccount.automount | bool | `true` |  |
+| serviceAccount.create | bool | `true` |  |
 | serviceTree.layer | string | `"2"` |  |
 | serviceTree.module | string | `"core"` |  |
 | serviceTree.platform | string | `"aldehyde"` |  |

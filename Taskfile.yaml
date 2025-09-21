@@ -35,3 +35,10 @@ tasks:
     dir: chart
     cmds:
       - helm dependency update
+
+  latest:
+    desc: Get latest dependencies
+    cmds:
+      - >-
+        echo "dragonfly: $(skopeo list-tags docker://ghcr.io/dragonflydb/dragonfly/helm/dragonfly | jq -r '.Tags[]'
+        | sort -V | tail -n 6 | head -n 1)"

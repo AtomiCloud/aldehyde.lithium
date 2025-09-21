@@ -5,3 +5,8 @@ description: Helm Chart to deploy Logto as Auth System
 type: application
 version: 0.1.0
 appVersion: '0.1.0'
+
+dependencies:
+  - name: dragonfly
+    version: v1.31.2
+    repository: oci://ghcr.io/dragonflydb/dragonfly/helm

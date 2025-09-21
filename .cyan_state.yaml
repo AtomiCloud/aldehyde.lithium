@@ -4,34 +4,28 @@ atomi/helm:
     - version: 4
       time: 2025-09-20T11:55:46.284111Z
       answers:
-        atomi/helm/deployment:
-          type: Bool
-          value: true
-        layer:
-          type: String
-          value: '2'
-        platform:
-          type: String
-          value: aldehyde
-        module:
-          type: String
-          value: core
         desc:
           type: String
           value: Helm Chart to deploy Logto as Auth System
+        module:
+          type: String
+          value: core
+        platform:
+          type: String
+          value: aldehyde
+        layer:
+          type: String
+          value: '2'
         service:
           type: String
           value: lithium
+        atomi/helm/deployment:
+          type: Bool
+          value: true
       deterministic_states: {}
     - version: 5
       time: 2025-09-20T12:16:18.240276Z
       answers:
-        platform:
-          type: String
-          value: aldehyde
-        atomi/helm/deployment:
-          type: Bool
-          value: true
         desc:
           type: String
           value: Helm Chart to deploy Logto as Auth System
@@ -44,6 +38,59 @@ atomi/helm:
         layer:
           type: String
           value: '2'
+        atomi/helm/deployment:
+          type: Bool
+          value: true
+        platform:
+          type: String
+          value: aldehyde
+      deterministic_states: {}
+    - version: 6
+      time: 2025-09-20T12:28:21.688987Z
+      answers:
+        platform:
+          type: String
+          value: aldehyde
+        desc:
+          type: String
+          value: Helm Chart to deploy Logto as Auth System
+        module:
+          type: String
+          value: core
+        layer:
+          type: String
+          value: '2'
+        service:
+          type: String
+          value: lithium
+        atomi/helm/deployment:
+          type: Bool
+          value: true
+      deterministic_states: {}
+    - version: 8
+      time: 2025-09-20T13:15:34.853937Z
+      answers:
+        module:
+          type: String
+          value: core
+        atomi/helm/deployment:
+          type: Bool
+          value: true
+        atomi/helm/security:
+          type: Bool
+          value: true
+        layer:
+          type: String
+          value: '2'
+        platform:
+          type: String
+          value: aldehyde
+        desc:
+          type: String
+          value: Helm Chart to deploy Logto as Auth System
+        service:
+          type: String
+          value: lithium
       deterministic_states: {}
 atomi/nix-init:
   active: true
@@ -51,18 +98,18 @@ atomi/nix-init:
     - version: 14
       time: 2025-09-20T08:11:55.168525Z
       answers:
-        pre-commit:
-          type: Bool
-          value: true
-        standard-binary:
-          type: Bool
-          value: true
         init-type:
           type: String
           value: Standard
         Description of this Project:
           type: String
           value: aldehyde lithium Helm Chart
+        standard-binary:
+          type: Bool
+          value: true
+        pre-commit:
+          type: Bool
+          value: true
       deterministic_states: {}
 atomi/workspace:
   active: true
@@ -70,6 +117,12 @@ atomi/workspace:
     - version: 21
       time: 2025-09-20T08:13:01.248376Z
       answers:
+        atomi/workspace/enable-secret:
+          type: Bool
+          value: false
+        atomi/workspace/platform:
+          type: String
+          value: aldehyde
         atomi/workspace/enable-helm:
           type: Bool
           value: true
@@ -79,12 +132,6 @@ atomi/workspace:
         atomi/workspace/service:
           type: String
           value: lithium
-        atomi/workspace/platform:
-          type: String
-          value: aldehyde
-        atomi/workspace/enable-secret:
-          type: Bool
-          value: false
         atomi/workspace/enable-docker:
           type: Bool
           value: false
