@@ -42,6 +42,9 @@ tasks:
       - >-
         echo "dragonfly: $(skopeo list-tags docker://ghcr.io/dragonflydb/dragonfly/helm/dragonfly | jq -r '.Tags[]'
         | sort -V | tail -n 6 | head -n 1)"
+      - >-
+        echo "logto: $(skopeo list-tags docker://ghcr.io/logto-io/logto 
+        | jq -r '.Tags[]' | grep -E '[0-9]+\.[0-9]+\.[0-9]+' | sort -V | tail -n 1)"
 
   # Single command to list official Logto connectors with latest versions
   connectors:list:
