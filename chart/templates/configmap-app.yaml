@@ -10,9 +10,3 @@ data:
   TRUST_PROXY_HEADER: {{ (.Values.app.trustProxyHeader | default 1) | quote }}
   ENDPOINT: {{ .Values.app.endpoint | quote }}
   ADMIN_ENDPOINT: {{ .Values.app.adminEndpoint | quote }}
-  {{- with .Values.s3.config }}
-  STORAGE_TYPE: {{ .storageType | default "s3" | quote }}
-  S3_BUCKET: {{ .bucket | quote }}
-  S3_ENDPOINT: {{ .endpoint | quote }}
-  S3_REGION: {{ .region | quote }}
-  {{- end }}

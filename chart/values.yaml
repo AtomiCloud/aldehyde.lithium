@@ -2,13 +2,11 @@ serviceTree: &serviceTree
   platform: &platform aldehyde
   service: &service lithium
   layer: &layer '2'
-  module: &module core
 
 tags: &tags
   atomi.cloud/platform: *platform
   atomi.cloud/service: *service
   atomi.cloud/layer: *layer
-  atomi.cloud/module: *module
 
 # -- YAML Anchor for PodSecurityContext
 podSecurityContext: &podSecurityContext
@@ -76,24 +74,24 @@ adminIngress:
 
 resources:
   limits:
-    cpu: 100m
-    memory: 128Mi
+    cpu: 1
+    memory: 1Gi
   requests:
     cpu: 100m
-    memory: 128Mi
+    memory: 64Mi
 
 # This is to setup the liveness and readiness probes more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
 livenessProbe:
   httpGet:
-    path: /
+    path: /api/status
     port: http
 readinessProbe:
   httpGet:
-    path: /
+    path: /api/status
     port: http
 
 # This section is for setting up autoscaling more information can be found here: https://kubernetes.io/docs/concepts/workloads/autoscaling/
-replicaCount: 3
+replicaCount: 1
 autoscaling:
   enabled: false
   minReplicas: 1
@@ -117,10 +115,10 @@ maincache:
     enabled: false
 
   resources:
-    limits:
+    requests:
       memory: 256Mi
       cpu: 100m
-    requests:
+    limits:
       memory: 512Mi
       cpu: 250m
 
@@ -130,14 +128,6 @@ app:
   adminEndpoint: ""   # e.g., https://admin-auth.example.com
   trustProxyHeader: 1
 
-# S3 storage configuration
-s3:
-  config:
-    storageType: s3
-    bucket: ""
-    endpoint: ""
-    region: ""
-  
 secrets:
   create: true
   # If empty, uses "<release>-aldehyde-lithium-app"
@@ -145,13 +135,6 @@ secrets:
   data:
     # Required
     DB_URL: '' # e.g., postgres://user:pass@host:5432/logto
-    # Optional (defaults to redis://<release>-dragonfly:6379 when empty)
-    REDIS_URL: ''
-    # Optional S3 credentials (when STORAGE_TYPE=s3)
-    S3_ACCESS_KEY_ID: ''
-    S3_SECRET_ACCESS_KEY: ''
-    # Optional symmetric signing secret (if not relying solely on DB keys)
-    JWT_SECRET: ''
 
 # OIDC key rotation (DB-managed keys)
 oidc:

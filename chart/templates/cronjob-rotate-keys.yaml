@@ -30,11 +30,13 @@ spec:
               command: ["sh", "-lc"]
               args:
                 - >-
-                  npm run cli db config rotate privateKeys -- --type {{ .Values.oidc.rotate.type | default "ec" }}
-                  {{- if .Values.oidc.rotate.cookieKeys }} && npm run cli db config rotate cookieKeys {{- end }}
+                  npm run cli db config rotate oidc.privateKeys -- --type {{ .Values.oidc.rotate.type | default "ec" }}
+                  {{- if .Values.oidc.rotate.cookieKeys }} && npm run cli db config rotate oidc.cookieKeys {{- end }}
               envFrom:
                 - configMapRef:
                     name: {{ include "aldehyde-lithium.fullname" . }}-app
                 - secretRef:
                     name: {{ default (printf "%s-app" (include "aldehyde-lithium.fullname" .)) .Values.secrets.nameOverride }}
+                - secretRef:
+                    name: {{ include "aldehyde-lithium.fullname-with-suffix" (dict "root" . "arg" "redis") }}
 {{- end }}

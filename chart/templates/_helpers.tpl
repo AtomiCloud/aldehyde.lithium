@@ -47,9 +47,6 @@ helm.sh/chart: {{ include "aldehyde-lithium.chart" . }}
 "atomi.cloud/{{ $k }}": "{{ $v }}"
 {{- end }}
 {{ include "aldehyde-lithium.selectorLabels" . }}
-{{- if .Chart.AppVersion }}
-app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
-{{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
 

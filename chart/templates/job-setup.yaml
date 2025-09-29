@@ -5,6 +5,7 @@ metadata:
   name: {{ include "aldehyde-lithium.fullname-with-suffix" (dict "root" . "arg" "setup") }}
   labels:
     {{- include "aldehyde-lithium.labels" . | nindent 4 }}
+    atomi.cloud/module: 'setup'
   annotations:
     argocd.argoproj.io/sync-wave: "{{ .Values.syncWaves.setupJob | default "4" }}"
     # Argo CD waits for Job completion before advancing waves.
@@ -14,6 +15,7 @@ spec:
     metadata:
       labels:
         {{- include "aldehyde-lithium.labels" . | nindent 8 }}
+        atomi.cloud/module: 'setup'
     spec:
       restartPolicy: OnFailure
       {{- with .Values.imagePullSecrets }}
@@ -26,10 +28,12 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command: ["sh", "-lc"]
-          args: ["npm run cli db seed -- --swe"]
+          args: ["npm run cli db seed -- --swe --encrypt-base-role"]
           envFrom:
             - configMapRef:
                 name: {{ include "aldehyde-lithium.fullname" . }}-app
             - secretRef:
                 name: {{ default (printf "%s-app" (include "aldehyde-lithium.fullname" .)) .Values.secrets.nameOverride }}
+            - secretRef:
+                name: {{ include "aldehyde-lithium.fullname-with-suffix" (dict "root" . "arg" "redis") }}
 {{- end }}

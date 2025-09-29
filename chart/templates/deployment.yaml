@@ -4,6 +4,7 @@ metadata:
   name: {{ include "aldehyde-lithium.fullname" . }}
   labels:
     {{ include "aldehyde-lithium.labels" . | nindent 4 }}
+    atomi.cloud/module: 'api'
   annotations:
     argocd.argoproj.io/sync-wave: "{{ .Values.syncWaves.deployment | default "6" }}"
 spec:
@@ -13,28 +14,25 @@ spec:
   selector:
     matchLabels:
       {{ include "aldehyde-lithium.selectorLabels" . | nindent 6 }}
+      atomi.cloud/module: 'api'
   template:
     metadata:
       annotations:
         {{- include "aldehyde-lithium.labels" . | nindent 8 }}
       labels:
         {{- include "aldehyde-lithium.labels" . | nindent 8 }}
+        atomi.cloud/module: 'api'
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ include "aldehyde-lithium.serviceAccountName" . }}
-      {{- with .Values.podSecurityContext }}
-      securityContext:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
       containers:
         - name: {{ .Chart.Name }}
-          {{- with .Values.securityContext }}
-          securityContext:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
+          command:
+            - npm
+            - start
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
@@ -49,6 +47,8 @@ spec:
                 name: {{ include "aldehyde-lithium.fullname" . }}-app
             - secretRef:
                 name: {{ default (printf "%s-app" (include "aldehyde-lithium.fullname" .)) .Values.secrets.nameOverride }}
+            - secretRef:
+                name: {{ include "aldehyde-lithium.fullname-with-suffix" (dict "root" . "arg" "redis") }}
           {{- with .Values.livenessProbe }}
           livenessProbe:
             {{- toYaml . | nindent 12 }}
@@ -61,6 +61,7 @@ spec:
           resources:
             {{- toYaml . | nindent 12 }}
           {{- end }}
+
           # no additional volume mounts
       {{- with .Values.nodeSelector }}
       nodeSelector:

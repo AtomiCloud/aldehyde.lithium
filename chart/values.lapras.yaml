@@ -1,0 +1,83 @@
+serviceTree: &serviceTree
+  landscape: &landscape
+
+tags: &tags
+  atomi.cloud/landscape: *landscape
+
+# This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/
+image:
+  repository: ghcr.io/logto-io/logto
+  pullPolicy: IfNotPresent
+  tag: ''
+
+imagePullSecrets: [ ]
+nameOverride: ''
+fullnameOverride: 'lithium-authapi'
+
+
+# This block is for setting up the ingress for more information can be found here: https://kubernetes.io/docs/concepts/services-networking/ingress/
+ingress:
+  enabled: false
+  className: traefik
+  hosts:
+    - host: api.lithium.aldehyde.lapras.lvh.me
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: [ ]
+
+# Optional separate ingress for the admin portal
+adminIngress:
+  enabled: false
+  className: traefik
+  hosts:
+    - host: admin.lithium.aldehyde.lapras.lvh.me
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: [ ]
+
+resources:
+  limits:
+    cpu: 1
+    memory: 1Gi
+  requests:
+    cpu: 100m
+    memory: 64Mi
+
+# This section is for setting up autoscaling more information can be found here: https://kubernetes.io/docs/concepts/workloads/autoscaling/
+replicaCount: 1
+
+## No additional volumes or mounts required
+
+nodeSelector: { }
+
+tolerations: [ ]
+
+affinity: { }
+
+maincache:
+  fullnameOverride: 'lithium-authcache'
+  resources:
+    requests:
+      memory: 256Mi
+      cpu: 100m
+    limits:
+      memory: 512Mi
+      cpu: 250m
+
+app:
+  # Public endpoints
+  endpoint: "https://api.atomi.dev/"        # e.g., https://auth.example.com
+  adminEndpoint: "https://admin.atomi.dev/"   # e.g., https://admin-auth.example.com
+
+secrets:
+  create: true
+  nameOverride: ''
+  data: { }
+
+# OIDC key rotation (DB-managed keys)
+oidc:
+  rotate:
+    cookieKeys: false
+    enabled: false

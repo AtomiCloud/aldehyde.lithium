@@ -5,6 +5,7 @@ metadata:
   name: {{ include "aldehyde-lithium.fullname-with-suffix" (dict "root" . "arg" "migrate") }}
   labels:
     {{- include "aldehyde-lithium.labels" . | nindent 4 }}
+    atomi.cloud/module: 'migrate'
   annotations:
     argocd.argoproj.io/sync-wave: "{{ .Values.syncWaves.migrationJob | default "5" }}"
     # Argo CD considers a Job healthy when it completes; next wave proceeds then.
@@ -14,6 +15,7 @@ spec:
     metadata:
       labels:
         {{- include "aldehyde-lithium.labels" . | nindent 8 }}
+        atomi.cloud/module: 'migrate'
     spec:
       restartPolicy: OnFailure
       {{- with .Values.imagePullSecrets }}
@@ -32,4 +34,6 @@ spec:
                 name: {{ include "aldehyde-lithium.fullname" . }}-app
             - secretRef:
                 name: {{ default (printf "%s-app" (include "aldehyde-lithium.fullname" .)) .Values.secrets.nameOverride }}
+            - secretRef:
+                name: {{ include "aldehyde-lithium.fullname-with-suffix" (dict "root" . "arg" "redis") }}
 {{- end }}
