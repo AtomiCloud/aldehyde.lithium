@@ -39,26 +39,14 @@ tasks:
   latest:
     desc: Get latest dependencies
     cmds:
-      - >-
-        echo "dragonfly: $(skopeo list-tags docker://ghcr.io/dragonflydb/dragonfly/helm/dragonfly | jq -r '.Tags[]'
-        | sort -V | tail -n 1)"
+      - task: util:latest-oci
+        vars:
+          NAME: bromine
+          OCI: ghcr.io/atomicloud/sulfoxide.bromine/sulfoxide-bromine
+      - task: util:latest-oci
+        vars:
+          NAME: bromine
+          OCI: ghcr.io/dragonflydb/dragonfly/helm/dragonfly
       - >-
         echo "logto: $(skopeo list-tags docker://ghcr.io/logto-io/logto 
         | jq -r '.Tags[]' | grep -E '[0-9]+\.[0-9]+\.[0-9]+' | sort -V | tail -n 1)"
-
-  # Single command to list official Logto connectors with latest versions
-  connectors:list:
-    desc: Print official @logto/connector-* packages with latest versions (one per line)
-    cmds:
-      - |
-        set -euo pipefail
-        # Filter by maintainer (Logto core) and exclude mock/kit/logto demos
-        url='https://registry.npmjs.org/-/v1/search?text=%40logto%2Fconnector-+maintainer%3Agaosun&size=200'
-        curl -fsSL "$url" \
-        | jq -r '
-            .objects[].package
-            | select(.name | startswith("@logto/connector-"))
-            | (.name | sub("^@logto/connector-"; "")) as $base
-            | select((["mock","kit","logto"] | map(. as $ex | ($base | startswith($ex))) | any) | not)
-            | .name + "@" + .version' \
-        | sort

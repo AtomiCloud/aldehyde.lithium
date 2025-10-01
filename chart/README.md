@@ -8,6 +8,7 @@ Helm Chart to deploy Logto as Auth System
 
 | Repository | Name | Version |
 |------------|------|---------|
+| oci://ghcr.io/atomicloud/sulfoxide.bromine | bromine(sulfoxide-bromine) | 1.8.0 |
 | oci://ghcr.io/dragonflydb/dragonfly/helm | maincache(dragonfly) | v1.34.1 |
 
 ## Values
@@ -28,6 +29,16 @@ Helm Chart to deploy Logto as Auth System
 | autoscaling.maxReplicas | int | `100` |  |
 | autoscaling.minReplicas | int | `1` |  |
 | autoscaling.targetCPUUtilizationPercentage | int | `80` |  |
+| bromine.annotations."argocd.argoproj.io/sync-wave" | string | `"1"` |  |
+| bromine.rootSecret | object | `{"name":"lithium","ref":{"clientId":"ALDEHYDE_LITHIUM_CLIENT_ID","clientSecret":"ALDEHYDE_LITHIUM_CLIENT_SECRET"}}` | Secret of Secrets reference |
+| bromine.rootSecret.ref | object | `{"clientId":"ALDEHYDE_LITHIUM_CLIENT_ID","clientSecret":"ALDEHYDE_LITHIUM_CLIENT_SECRET"}` | Infisical Token Reference |
+| bromine.rootSecret.ref.clientId | string | `"ALDEHYDE_LITHIUM_CLIENT_ID"` | Client ID |
+| bromine.rootSecret.ref.clientSecret | string | `"ALDEHYDE_LITHIUM_CLIENT_SECRET"` | Client Secret |
+| bromine.serviceTree.<<.layer | string | `"2"` |  |
+| bromine.serviceTree.<<.platform | string | `"aldehyde"` |  |
+| bromine.serviceTree.<<.service | string | `"lithium"` |  |
+| bromine.storeName | string | `"lithium"` | Store name to create |
+| bromine.target | string | `"lithium"` |  |
 | fullnameOverride | string | `""` |  |
 | image.pullPolicy | string | `"IfNotPresent"` |  |
 | image.repository | string | `"ghcr.io/logto-io/logto"` |  |
@@ -74,9 +85,9 @@ Helm Chart to deploy Logto as Auth System
 | resources.limits.memory | string | `"1Gi"` |  |
 | resources.requests.cpu | string | `"100m"` |  |
 | resources.requests.memory | string | `"64Mi"` |  |
-| secrets.create | bool | `true` |  |
+| secrets.create | bool | `false` |  |
 | secrets.data.DB_URL | string | `""` |  |
-| secrets.nameOverride | string | `""` |  |
+| secrets.nameOverride | string | `"lithium"` |  |
 | securityContext | object | `{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"readOnlyRootFilesystem":true,"runAsGroup":3000,"runAsNonRoot":true,"runAsUser":1000}` | YAML Anchor for SecurityContext |
 | service.containerPorts.admin | int | `3002` |  |
 | service.containerPorts.http | int | `3001` |  |

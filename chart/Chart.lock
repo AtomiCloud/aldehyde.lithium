@@ -2,5 +2,8 @@ dependencies:
 - name: dragonfly
   repository: oci://ghcr.io/dragonflydb/dragonfly/helm
   version: v1.34.1
-digest: sha256:839fb39e630ec97cc85c8d0d684924b4c5348dc5c250fbcde7acc9d06405fc94
-generated: "2025-09-29T09:12:18.67502+08:00"
+- name: sulfoxide-bromine
+  repository: oci://ghcr.io/atomicloud/sulfoxide.bromine
+  version: 1.8.0
+digest: sha256:3d17eb1140776bd7042bdcb24b23a6a1033e561658b3a19e7ba8c44c620abfe7
+generated: "2025-10-02T01:17:22.769833+08:00"

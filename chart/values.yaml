@@ -30,6 +30,28 @@ serviceAccount:
   create: true
   automount: true
 
+
+bromine:
+  serviceTree:
+    <<: *serviceTree
+  annotations:
+    argocd.argoproj.io/sync-wave: '1'
+  # -- Store name to create
+  storeName: *service
+  # -- Secret of Secrets reference
+  rootSecret:
+    name: *service
+    # -- Infisical Token Reference
+    ref:
+      # -- Client ID
+      clientId: ALDEHYDE_LITHIUM_CLIENT_ID
+      # -- Client Secret
+      clientSecret: ALDEHYDE_LITHIUM_CLIENT_SECRET
+
+  target: &target lithium
+
+
+
 # This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/
 image:
   repository: ghcr.io/logto-io/logto
@@ -129,9 +151,9 @@ app:
   trustProxyHeader: 1
 
 secrets:
-  create: true
+  create: false
   # If empty, uses "<release>-aldehyde-lithium-app"
-  nameOverride: ''
+  nameOverride: *target
   data:
     # Required
     DB_URL: '' # e.g., postgres://user:pass@host:5432/logto

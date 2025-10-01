@@ -11,3 +11,8 @@ dependencies:
     version: v1.34.1
     alias: maincache
     repository: oci://ghcr.io/dragonflydb/dragonfly/helm
+  - name: sulfoxide-bromine
+    version: 1.8.0
+    condition: bromine.enable
+    alias: bromine
+    repository: oci://ghcr.io/atomicloud/sulfoxide.bromine
