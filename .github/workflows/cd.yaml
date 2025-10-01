@@ -13,7 +13,7 @@ jobs:
     with:
       atomi_platform: aldehyde
       atomi_service: lithium
-      chart_path: ./infra/root_chart
+      chart_path: ./chart
 
       version: ${{ github.ref_name }}
   #
