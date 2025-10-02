@@ -42,7 +42,6 @@ Create chart name and version as used by the chart label.
 Common labels
 */}}
 {{- define "aldehyde-lithium.labels" -}}
-helm.sh/chart: {{ include "aldehyde-lithium.chart" . }}
 {{- range $k, $v := .Values.serviceTree }}
 "atomi.cloud/{{ $k }}": "{{ $v }}"
 {{- end }}
