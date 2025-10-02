@@ -5,7 +5,7 @@ metadata:
   name: {{ include "aldehyde-lithium.fullname-with-suffix" (dict "root" . "arg" "rotate-keys") }}
   labels:
     {{- include "aldehyde-lithium.labels" . | nindent 4 }}
-  annotations:
+  annotations: {{- include "aldehyde-lithium.annotations" . | nindent 4 }}
     argocd.argoproj.io/sync-wave: "{{ .Values.syncWaves.migrationJob | default "5" }}"
 spec:
   schedule: {{ .Values.oidc.rotate.schedule | default "0 0 * * *" | quote }}
@@ -14,6 +14,7 @@ spec:
       backoffLimit: {{ .Values.oidc.rotate.backoffLimit | default 0 }}
       template:
         metadata:
+          annotations: {{- include "aldehyde-lithium.annotations" . | nindent 12 }}
           labels:
             {{- include "aldehyde-lithium.labels" . | nindent 12 }}
         spec:

@@ -5,7 +5,7 @@ metadata:
   labels:
     {{ include "aldehyde-lithium.labels" . | nindent 4 }}
     atomi.cloud/module: 'api'
-  annotations:
+  annotations: {{- include "aldehyde-lithium.annotations" . | nindent 4 }}
     argocd.argoproj.io/sync-wave: "{{ .Values.syncWaves.deployment | default "6" }}"
 spec:
   {{- if not .Values.autoscaling.enabled }}
@@ -17,10 +17,8 @@ spec:
       atomi.cloud/module: 'api'
   template:
     metadata:
-      annotations:
-        {{- include "aldehyde-lithium.labels" . | nindent 8 }}
-      labels:
-        {{- include "aldehyde-lithium.labels" . | nindent 8 }}
+      annotations: {{- include "aldehyde-lithium.labels" . | nindent 8 }}
+      labels: {{- include "aldehyde-lithium.labels" . | nindent 8 }}
         atomi.cloud/module: 'api'
     spec:
       {{- with .Values.imagePullSecrets }}

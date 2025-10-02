@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: {{ include "aldehyde-lithium.fullname" . }}
   labels: {{- include "aldehyde-lithium.labels" . | nindent 4 }}
-  annotations:
+  annotations: {{- include "aldehyde-lithium.annotations" . | nindent 4 }}
     argocd.argoproj.io/sync-wave: "{{ .Values.syncWaves.service | default "7" }}"
 spec:
   type: {{ .Values.service.type }}

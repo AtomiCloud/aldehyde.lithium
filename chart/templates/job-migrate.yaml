@@ -6,13 +6,14 @@ metadata:
   labels:
     {{- include "aldehyde-lithium.labels" . | nindent 4 }}
     atomi.cloud/module: 'migrate'
-  annotations:
+  annotations: {{- include "aldehyde-lithium.annotations" . | nindent 4 }}
     argocd.argoproj.io/sync-wave: "{{ .Values.syncWaves.migrationJob | default "5" }}"
     # Argo CD considers a Job healthy when it completes; next wave proceeds then.
 spec:
   backoffLimit: {{ .Values.migrations.backoffLimit | default 3 }}
   template:
     metadata:
+      annotations: {{- include "aldehyde-lithium.annotations" . | nindent 8 }}
       labels:
         {{- include "aldehyde-lithium.labels" . | nindent 8 }}
         atomi.cloud/module: 'migrate'
