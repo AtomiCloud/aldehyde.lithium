@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/AtomiCloud/aldehyde.lithium/compare/v1.0.0...v1.0.1) (2025-10-02)
+
+
+### 🐛 Bug Fixes 🐛
+
+* pin logto version ([269e8fd](https://github.com/AtomiCloud/aldehyde.lithium/commit/269e8fdd32d6a1ac0ed74adadc4d6f5e666c9499))
+
 ## 1.0.0 (2025-10-01)
 
 
