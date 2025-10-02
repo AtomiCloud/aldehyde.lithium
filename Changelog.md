@@ -1,3 +1,10 @@
+## [1.1.0](https://github.com/AtomiCloud/aldehyde.lithium/compare/v1.0.2...v1.1.0) (2025-10-02)
+
+
+### ✨ Features ✨
+
+* update 1.32.0 ([105319f](https://github.com/AtomiCloud/aldehyde.lithium/commit/105319f7223db1f18f5c6ca091eee89b39804ca4))
+
 ## [1.0.2](https://github.com/AtomiCloud/aldehyde.lithium/compare/v1.0.1...v1.0.2) (2025-10-02)
 
 
