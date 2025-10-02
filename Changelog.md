@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/AtomiCloud/aldehyde.lithium/compare/v1.0.1...v1.0.2) (2025-10-02)
+
+
+### 🐛 Bug Fixes 🐛
+
+* missing annotations and external secrets ([4412443](https://github.com/AtomiCloud/aldehyde.lithium/commit/4412443d5c2fa722f50acaa345db9fd480f64bd3))
+
 ## [1.0.1](https://github.com/AtomiCloud/aldehyde.lithium/compare/v1.0.0...v1.0.1) (2025-10-02)
 
 
