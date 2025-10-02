@@ -45,7 +45,7 @@ tasks:
           OCI: ghcr.io/atomicloud/sulfoxide.bromine/sulfoxide-bromine
       - task: util:latest-oci
         vars:
-          NAME: bromine
+          NAME: dragonfly
           OCI: ghcr.io/dragonflydb/dragonfly/helm/dragonfly
       - >-
         echo "logto: $(skopeo list-tags docker://ghcr.io/logto-io/logto 

@@ -42,7 +42,7 @@ Helm Chart to deploy Logto as Auth System
 | fullnameOverride | string | `""` |  |
 | image.pullPolicy | string | `"IfNotPresent"` |  |
 | image.repository | string | `"ghcr.io/logto-io/logto"` |  |
-| image.tag | string | `""` |  |
+| image.tag | string | `"1.32.0"` |  |
 | imagePullSecrets | list | `[]` |  |
 | ingress.className | string | `"traefik"` |  |
 | ingress.enabled | bool | `true` |  |
