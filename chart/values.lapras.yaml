@@ -8,12 +8,14 @@ tags: &tags
 image:
   repository: ghcr.io/logto-io/logto
   pullPolicy: IfNotPresent
-  tag: ''
+  tag: '1.32.0'
 
 imagePullSecrets: [ ]
 nameOverride: ''
-fullnameOverride: 'lithium-api'
+fullnameOverride: 'lithium-authapi'
 
+bromine:
+  enable: false
 
 # This block is for setting up the ingress for more information can be found here: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ingress:
@@ -74,7 +76,8 @@ app:
 secrets:
   create: true
   nameOverride: ''
-  data: { }
+  data:
+    DB_URL: 'postgresql://neondb_owner:npg_xvDp40PFBsQG@ep-quiet-bread-a15h2hzv.ap-southeast-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require'
 
 # OIDC key rotation (DB-managed keys)
 oidc:

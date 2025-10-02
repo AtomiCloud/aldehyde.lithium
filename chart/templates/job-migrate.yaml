@@ -29,7 +29,7 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command: ["sh", "-lc"]
-          args: ["npm run cli db alt deploy"]
+          args: ["npm run cli db alt deploy {{.Values.image.tag }}"]
           envFrom:
             - configMapRef:
                 name: {{ include "aldehyde-lithium.fullname" . }}-app
