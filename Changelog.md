@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/AtomiCloud/aldehyde.lithium/compare/v1.1.0...v1.1.1) (2025-10-02)
+
+
+### 🐛 Bug Fixes 🐛
+
+* remove chart from labels ([8db2ade](https://github.com/AtomiCloud/aldehyde.lithium/commit/8db2adea038e40a5cbb0e82908cfecd2e30aa938))
+
 ## [1.1.0](https://github.com/AtomiCloud/aldehyde.lithium/compare/v1.0.2...v1.1.0) (2025-10-02)
 
 
