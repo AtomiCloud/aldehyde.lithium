@@ -32,6 +32,33 @@ If release name contains chart name it will be used as a full name.
 {{- end }}
 
 {{/*
+Hostname of the Postgres that Logto connects to when the bundled DB is enabled.
+Uses postgres.fullnameOverride (the bitnami subchart's service name); falls back
+to the bitnami default "<release>-postgresql".
+*/}}
+{{- define "aldehyde-lithium.dbHost" -}}
+{{- if .Values.postgres.fullnameOverride -}}
+{{- .Values.postgres.fullnameOverride | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{- printf "%s-postgresql" .Release.Name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end }}
+
+{{/*
+Logto DB connection string. Explicit secrets.data.DB_URL wins; otherwise, when the
+bundled Postgres is enabled, derive it from postgres.auth + the bundled DB host.
+*/}}
+{{- define "aldehyde-lithium.dbUrl" -}}
+{{- if .Values.secrets.data.DB_URL -}}
+{{- .Values.secrets.data.DB_URL -}}
+{{- else if .Values.postgres.enabled -}}
+{{- printf "postgres://%s:%s@%s:5432/%s" .Values.postgres.auth.username .Values.postgres.auth.password (include "aldehyde-lithium.dbHost" .) .Values.postgres.auth.database -}}
+{{- else -}}
+{{- required "secrets.data.DB_URL must be set (e.g. postgres://user:pass@host:5432/logto), or enable postgres.enabled" .Values.secrets.data.DB_URL -}}
+{{- end -}}
+{{- end }}
+
+{{/*
 Create chart name and version as used by the chart label.
 */}}
 {{- define "aldehyde-lithium.chart" -}}

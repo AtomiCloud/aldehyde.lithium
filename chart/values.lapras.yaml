@@ -73,11 +73,21 @@ app:
   endpoint: "https://api.atomi.dev/"        # e.g., https://auth.example.com
   adminEndpoint: "https://admin.atomi.dev/"   # e.g., https://admin-auth.example.com
 
+# Local/transient: run an in-cluster Postgres instead of an external (Neon) DB.
+postgres:
+  enabled: true
+  fullnameOverride: 'lithium-maindb'
+  auth:
+    username: logto
+    password: supersecret
+    database: logto
+
 secrets:
   create: true
   nameOverride: ''
   data:
-    DB_URL: 'postgresql://neondb_owner:npg_xvDp40PFBsQG@ep-quiet-bread-a15h2hzv.ap-southeast-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require'
+    # Empty → auto-derived from the bundled postgres above.
+    DB_URL: ''
 
 # OIDC key rotation (DB-managed keys)
 oidc:
