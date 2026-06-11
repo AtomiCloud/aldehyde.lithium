@@ -5,5 +5,8 @@ dependencies:
 - name: sulfoxide-bromine
   repository: oci://ghcr.io/atomicloud/sulfoxide.bromine
   version: 1.8.0
-digest: sha256:3d17eb1140776bd7042bdcb24b23a6a1033e561658b3a19e7ba8c44c620abfe7
-generated: "2025-10-02T01:17:22.769833+08:00"
+- name: postgresql
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 15.5.16
+digest: sha256:00d10ce64ff8275948858039f6b7880efa23580df9bf442c7fd4a6130b59e266
+generated: "2026-06-11T11:06:50.257266-07:00"

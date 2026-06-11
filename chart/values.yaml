@@ -154,8 +154,32 @@ secrets:
   # If empty, uses "<release>-aldehyde-lithium-app"
   nameOverride: *target
   data:
-    # Required
-    DB_URL: '' # e.g., postgres://user:pass@host:5432/logto
+    # Required. Logto's Postgres connection string, e.g.
+    # postgres://user:pass@host:5432/logto. Production points this at an external
+    # DB (e.g. Neon); for transient/local set maindb.enable=true and point this
+    # at the bundled service (postgres://logto:<pw>@<fullnameOverride>:5432/logto).
+    DB_URL: ''
+
+# Optional bundled PostgreSQL for Logto's datastore — mirrors zinc's `maindb`.
+# Single toggle: maindb.enable (unset/false by default, so production deploys no
+# DB and uses the external DB_URL above). Enable for transient/local (lapras).
+maindb:
+  image:
+    repository: bitnamilegacy/postgresql
+  primary:
+    persistence:
+      enabled: false
+  auth:
+    username: logto
+    password: supersecret
+    database: logto
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: '1'
+      memory: 512Mi
 
 # OIDC key rotation (DB-managed keys)
 oidc:
