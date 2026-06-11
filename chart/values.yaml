@@ -199,7 +199,7 @@ bootstrap:
   #   LOGTO_M2M_APP_SECRET  (the chosen secret; stored plaintext, retrievable)
   masterKeySecret: ''
   # psql client image used to run the idempotent seed.
-  image: postgres:16-alpine
+  image: "postgres:16-alpine"
   syncWave: '5'
   backoffLimit: 30
   tenantId: default

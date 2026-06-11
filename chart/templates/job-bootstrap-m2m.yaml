@@ -1,6 +1,6 @@
 {{- if .Values.bootstrap.enable }}
 {{- $b := .Values.bootstrap }}
-{{- $fullname := printf "%s-bootstrap-m2m" (include "aldehyde-lithium.fullname" .) }}
+{{- $fullname := printf "%s-bootstrap-m2m" (include "aldehyde-lithium.fullname" .) | trunc 63 | trimSuffix "-" }}
 {{- $appSecret := default (printf "%s-app" (include "aldehyde-lithium.fullname" .)) .Values.secrets.nameOverride }}
 {{- $masterSecret := required "bootstrap.masterKeySecret is required when bootstrap.enable=true" $b.masterKeySecret }}
 # ─────────────────────────────────────────────────────────────────────────────
