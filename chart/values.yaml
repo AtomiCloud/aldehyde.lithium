@@ -56,7 +56,7 @@ bromine:
 image:
   repository: ghcr.io/logto-io/logto
   pullPolicy: IfNotPresent
-  tag: 1.32.0
+  tag: 1.38.0
 
 imagePullSecrets: [ ]
 nameOverride: ''
@@ -180,6 +180,31 @@ maindb:
     limits:
       cpu: '1'
       memory: 512Mi
+
+# Bootstrap "master key" M2M — solves the Management-API chicken-and-egg.
+# Logto generates an app's client_id/secret and won't let you pre-set them via
+# the Management API, so a fresh instance has no M2M to call that API with. This
+# Job instead DB-seeds (idempotent) a master M2M whose id+secret you MOUNT as a
+# Secret, and grants it Logto's pre-seeded "Logto Management API access" role —
+# so a provisioner/operator can authenticate immediately, deterministically, on
+# every fresh/rebuilt Logto. Default OFF (production can manage this manually).
+#
+# Runs AFTER db seed/migrate (waits for the role to exist), so ordering is safe
+# regardless of sync-wave. The seed SQL targets Logto 1.38's schema
+# (applications / application_secrets / applications_roles) — review on image bump.
+bootstrap:
+  enable: false
+  # k8s Secret holding the master key. Required keys:
+  #   LOGTO_M2M_APP_ID      (21-char application id — non-secret, your choice)
+  #   LOGTO_M2M_APP_SECRET  (the chosen secret; stored plaintext, retrievable)
+  masterKeySecret: ''
+  # psql client image used to run the idempotent seed.
+  image: "postgres:16-alpine"
+  syncWave: '5'
+  backoffLimit: 30
+  tenantId: default
+  appName: 'Bootstrap M2M'
+  managementRole: 'Logto Management API access'
 
 # OIDC key rotation (DB-managed keys)
 oidc:

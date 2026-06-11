@@ -1,6 +1,6 @@
 # aldehyde-lithium
 
-![Version: 0.1.3](https://img.shields.io/badge/Version-0.1.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.31.0](https://img.shields.io/badge/AppVersion-1.31.0-informational?style=flat-square)
+![Version: 0.1.3](https://img.shields.io/badge/Version-0.1.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.38.0](https://img.shields.io/badge/AppVersion-1.38.0-informational?style=flat-square)
 
 Helm Chart to deploy Logto as Auth System
 
@@ -30,6 +30,14 @@ Helm Chart to deploy Logto as Auth System
 | autoscaling.maxReplicas | int | `100` |  |
 | autoscaling.minReplicas | int | `1` |  |
 | autoscaling.targetCPUUtilizationPercentage | int | `80` |  |
+| bootstrap.appName | string | `"Bootstrap M2M"` |  |
+| bootstrap.backoffLimit | int | `30` |  |
+| bootstrap.enable | bool | `false` |  |
+| bootstrap.image | string | `"postgres:16-alpine"` |  |
+| bootstrap.managementRole | string | `"Logto Management API access"` |  |
+| bootstrap.masterKeySecret | string | `""` |  |
+| bootstrap.syncWave | string | `"5"` |  |
+| bootstrap.tenantId | string | `"default"` |  |
 | bromine.annotations."argocd.argoproj.io/sync-wave" | string | `"1"` |  |
 | bromine.rootSecret | object | `{"name":"lithium","ref":{"clientId":"ALDEHYDE_LITHIUM_CLIENT_ID","clientSecret":"ALDEHYDE_LITHIUM_CLIENT_SECRET"}}` | Secret of Secrets reference |
 | bromine.rootSecret.ref | object | `{"clientId":"ALDEHYDE_LITHIUM_CLIENT_ID","clientSecret":"ALDEHYDE_LITHIUM_CLIENT_SECRET"}` | Infisical Token Reference |
@@ -43,7 +51,7 @@ Helm Chart to deploy Logto as Auth System
 | fullnameOverride | string | `""` |  |
 | image.pullPolicy | string | `"IfNotPresent"` |  |
 | image.repository | string | `"ghcr.io/logto-io/logto"` |  |
-| image.tag | string | `"1.32.0"` |  |
+| image.tag | string | `"1.38.0"` |  |
 | imagePullSecrets | list | `[]` |  |
 | ingress.className | string | `"traefik"` |  |
 | ingress.enabled | bool | `true` |  |
