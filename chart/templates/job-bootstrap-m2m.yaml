@@ -1,0 +1,110 @@
+{{- if .Values.bootstrap.enable }}
+{{- $b := .Values.bootstrap }}
+{{- $fullname := printf "%s-bootstrap-m2m" (include "aldehyde-lithium.fullname" .) }}
+{{- $appSecret := default (printf "%s-app" (include "aldehyde-lithium.fullname" .)) .Values.secrets.nameOverride }}
+{{- $masterSecret := required "bootstrap.masterKeySecret is required when bootstrap.enable=true" $b.masterKeySecret }}
+# ─────────────────────────────────────────────────────────────────────────────
+# Bootstrap master M2M.
+#
+# A fresh Logto can't call its own Management API (no M2M exists yet, and the API
+# won't accept a caller-chosen client_id/secret). This Job DB-seeds a master M2M
+# whose id+secret we MOUNT (from {{ $masterSecret }}), and grants it Logto's
+# pre-seeded "{{ $b.managementRole }}" role. M2M secrets are stored plaintext and
+# are retrievable, so the chosen secret is honoured — id+secret are deterministic.
+#
+# Idempotent (upsert) and self-ordering: it waits for the role to be seeded
+# (db seed/migrate), so the sync-wave is advisory. SQL targets Logto 1.38 schema.
+# ─────────────────────────────────────────────────────────────────────────────
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $fullname }}
+  labels: {{- include "aldehyde-lithium.labels" . | nindent 4 }}
+  annotations: {{- include "aldehyde-lithium.annotations" . | nindent 4 }}
+data:
+  seed.sql: |
+    -- Logto 1.38 schema: applications / application_secrets / applications_roles
+    insert into applications
+      (tenant_id, id, name, secret, description, type,
+       oidc_client_metadata, custom_client_metadata, custom_data, is_third_party)
+    values
+      (:'tenant_id', :'app_id', :'app_name', :'app_secret',
+       'Bootstrap master M2M for the Logto provisioner (aldehyde-lithium)',
+       'MachineToMachine',
+       '{"redirectUris":[],"postLogoutRedirectUris":[]}'::jsonb, '{}'::jsonb, '{}'::jsonb, false)
+    on conflict (id) do update set secret = excluded.secret, name = excluded.name;
+
+    -- M2M secret (varchar(64), plaintext / retrievable)
+    insert into application_secrets (tenant_id, application_id, name, value)
+    values (:'tenant_id', :'app_id', 'bootstrap', :'app_secret')
+    on conflict (tenant_id, application_id, name) do update set value = excluded.value;
+
+    -- grant the pre-seeded Management-API M2M role (looked up by name)
+    insert into applications_roles (tenant_id, id, application_id, role_id)
+    select :'tenant_id', left(md5(:'app_id' || ':mgmt'), 21), :'app_id', r.id
+    from roles r
+    where r.tenant_id = :'tenant_id' and r.name = :'mgmt_role'
+    on conflict (tenant_id, application_id, role_id) do nothing;
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ $fullname }}
+  labels: {{- include "aldehyde-lithium.labels" . | nindent 4 }}
+  annotations: {{- include "aldehyde-lithium.annotations" . | nindent 4 }}
+    argocd.argoproj.io/sync-wave: {{ $b.syncWave | default "5" | quote }}
+spec:
+  backoffLimit: {{ $b.backoffLimit | default 30 }}
+  template:
+    metadata:
+      labels: {{- include "aldehyde-lithium.selectorLabels" . | nindent 8 }}
+    spec:
+      restartPolicy: Never
+      volumes:
+        - name: seed
+          configMap:
+            name: {{ $fullname }}
+      containers:
+        - name: bootstrap
+          image: {{ $b.image | default "postgres:16-alpine" | quote }}
+          volumeMounts:
+            - name: seed
+              mountPath: /seed
+              readOnly: true
+          env:
+            - name: DB_URL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $appSecret | quote }}
+                  key: DB_URL
+            - name: APP_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $masterSecret | quote }}
+                  key: LOGTO_M2M_APP_ID
+            - name: APP_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $masterSecret | quote }}
+                  key: LOGTO_M2M_APP_SECRET
+            - name: TENANT_ID
+              value: {{ $b.tenantId | default "default" | quote }}
+            - name: APP_NAME
+              value: {{ $b.appName | default "Bootstrap M2M" | quote }}
+            - name: MGMT_ROLE
+              value: {{ $b.managementRole | default "Logto Management API access" | quote }}
+          command: ['/bin/sh', '-c']
+          args:
+            - |
+              set -eu
+              echo "⏳ waiting for Logto seed: role '$MGMT_ROLE' (tenant $TENANT_ID)…"
+              until [ "$(psql "$DB_URL" -tAc "select 1 from roles where tenant_id='$TENANT_ID' and name='$MGMT_ROLE' limit 1" 2>/dev/null)" = "1" ]; do
+                sleep 5
+              done
+              echo "🌱 ensuring bootstrap M2M '$APP_ID'…"
+              psql "$DB_URL" -v ON_ERROR_STOP=1 \
+                -v tenant_id="$TENANT_ID" -v app_id="$APP_ID" -v app_secret="$APP_SECRET" \
+                -v app_name="$APP_NAME" -v mgmt_role="$MGMT_ROLE" \
+                -f /seed/seed.sql
+              echo "✅ bootstrap master M2M ensured."
+{{- end }}
