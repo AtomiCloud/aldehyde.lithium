@@ -1,3 +1,15 @@
+## [1.3.0](https://github.com/AtomiCloud/aldehyde.lithium/compare/v1.2.0...v1.3.0) (2026-06-11)
+
+
+### ✨ Features ✨
+
+* bootstrap master M2M for Management API + bump Logto to 1.38 ([30fd27e](https://github.com/AtomiCloud/aldehyde.lithium/commit/30fd27e68e1ae9d5d5552c3650b322d6e313333c))
+
+
+### 🐛 Bug Fixes 🐛
+
+* truncate bootstrap job name to 63 chars; quote psql image ([b44f548](https://github.com/AtomiCloud/aldehyde.lithium/commit/b44f5487fe342350a7f274696191bd8e078188df))
+
 ## [1.2.0](https://github.com/AtomiCloud/aldehyde.lithium/compare/v1.1.1...v1.2.0) (2026-06-11)
 
 
