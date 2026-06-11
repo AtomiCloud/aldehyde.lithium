@@ -1,3 +1,16 @@
+## [1.2.0](https://github.com/AtomiCloud/aldehyde.lithium/compare/v1.1.1...v1.2.0) (2026-06-11)
+
+
+### ✨ Features ✨
+
+* add optional bundled postgres for Logto datastore ([0bdf119](https://github.com/AtomiCloud/aldehyde.lithium/commit/0bdf119d1bba9ef073337aad5c2259dbeaa6e711))
+
+
+### 🐛 Bug Fixes 🐛
+
+* require postgres.auth.password when bundled postgres is enabled ([7eb7dd4](https://github.com/AtomiCloud/aldehyde.lithium/commit/7eb7dd4ab99339a0f8b6b46f6ab0eeabf5b075a7))
+* sync Chart.lock after maindb dependency alias change ([b2b2f9d](https://github.com/AtomiCloud/aldehyde.lithium/commit/b2b2f9d37994dc0e0d5af364e4e3108c8919524d))
+
 ## [1.1.1](https://github.com/AtomiCloud/aldehyde.lithium/compare/v1.1.0...v1.1.1) (2025-10-02)
 
 
