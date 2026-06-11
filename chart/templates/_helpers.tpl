@@ -52,7 +52,8 @@ bundled Postgres is enabled, derive it from postgres.auth + the bundled DB host.
 {{- if .Values.secrets.data.DB_URL -}}
 {{- .Values.secrets.data.DB_URL -}}
 {{- else if .Values.postgres.enabled -}}
-{{- printf "postgres://%s:%s@%s:5432/%s" .Values.postgres.auth.username .Values.postgres.auth.password (include "aldehyde-lithium.dbHost" .) .Values.postgres.auth.database -}}
+{{- $pw := required "postgres.auth.password must be set when postgres.enabled=true (bitnami auto-generates one otherwise, which this URL can't see), or set secrets.data.DB_URL" .Values.postgres.auth.password -}}
+{{- printf "postgres://%s:%s@%s:5432/%s" .Values.postgres.auth.username $pw (include "aldehyde-lithium.dbHost" .) .Values.postgres.auth.database -}}
 {{- else -}}
 {{- required "secrets.data.DB_URL must be set (e.g. postgres://user:pass@host:5432/logto), or enable postgres.enabled" .Values.secrets.data.DB_URL -}}
 {{- end -}}
