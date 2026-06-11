@@ -154,29 +154,25 @@ secrets:
   # If empty, uses "<release>-aldehyde-lithium-app"
   nameOverride: *target
   data:
-    # Logto's Postgres connection string, e.g. postgres://user:pass@host:5432/logto.
-    # Leave empty when postgres.enabled=true — it is auto-derived from the bundled
-    # Postgres (postgres.auth + postgres.fullnameOverride). Required otherwise.
+    # Required. Logto's Postgres connection string, e.g.
+    # postgres://user:pass@host:5432/logto. Production points this at an external
+    # DB (e.g. Neon); for transient/local set maindb.enable=true and point this
+    # at the bundled service (postgres://logto:<pw>@<fullnameOverride>:5432/logto).
     DB_URL: ''
 
-# Optional bundled PostgreSQL for Logto's datastore.
-# Default OFF: production supplies an external DB_URL (e.g. Neon) above.
-# Set postgres.enabled=true for transient/local (lapras) to run an in-cluster
-# Postgres whose password you control; when DB_URL is empty it is auto-derived
-# from the values below (see templates/secret-app.yaml).
-postgres:
-  enabled: false
-  # Deterministic service name so DB_URL can be derived/pinned. Override per consumer.
-  fullnameOverride: lithium-db
+# Optional bundled PostgreSQL for Logto's datastore — mirrors zinc's `maindb`.
+# Single toggle: maindb.enable (unset/false by default, so production deploys no
+# DB and uses the external DB_URL above). Enable for transient/local (lapras).
+maindb:
   image:
     repository: bitnamilegacy/postgresql
-  auth:
-    username: logto
-    password: ''
-    database: logto
   primary:
     persistence:
       enabled: false
+  auth:
+    username: logto
+    password: supersecret
+    database: logto
   resources:
     requests:
       cpu: 100m

@@ -17,10 +17,10 @@ dependencies:
     alias: bromine
     repository: oci://ghcr.io/atomicloud/sulfoxide.bromine
   # Optional bundled Postgres for Logto's datastore. Default OFF — production
-  # supplies an external DB_URL (e.g. Neon). Enable for transient/local
-  # (lapras) to run an in-cluster Postgres whose password you control.
+  # supplies an external DB_URL (e.g. Neon). Enable (maindb.enable) for
+  # transient/local (lapras) to run an in-cluster Postgres whose password you control.
   - name: postgresql
     version: 15.5.16
-    condition: postgres.enabled
-    alias: postgres
+    condition: maindb.enable
+    alias: maindb
     repository: oci://registry-1.docker.io/bitnamicharts

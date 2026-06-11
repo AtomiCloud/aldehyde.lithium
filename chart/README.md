@@ -10,7 +10,7 @@ Helm Chart to deploy Logto as Auth System
 |------------|------|---------|
 | oci://ghcr.io/atomicloud/sulfoxide.bromine | bromine(sulfoxide-bromine) | 1.8.0 |
 | oci://ghcr.io/dragonflydb/dragonfly/helm | maincache(dragonfly) | v1.34.1 |
-| oci://registry-1.docker.io/bitnamicharts | postgres(postgresql) | 15.5.16 |
+| oci://registry-1.docker.io/bitnamicharts | maindb(postgresql) | 15.5.16 |
 
 ## Values
 
@@ -68,6 +68,15 @@ Helm Chart to deploy Logto as Auth System
 | maincache.securityContext.runAsNonRoot | bool | `true` |  |
 | maincache.securityContext.runAsUser | int | `1000` |  |
 | maincache.storage.enabled | bool | `false` |  |
+| maindb.auth.database | string | `"logto"` |  |
+| maindb.auth.password | string | `"supersecret"` |  |
+| maindb.auth.username | string | `"logto"` |  |
+| maindb.image.repository | string | `"bitnamilegacy/postgresql"` |  |
+| maindb.primary.persistence.enabled | bool | `false` |  |
+| maindb.resources.limits.cpu | string | `"1"` |  |
+| maindb.resources.limits.memory | string | `"512Mi"` |  |
+| maindb.resources.requests.cpu | string | `"100m"` |  |
+| maindb.resources.requests.memory | string | `"128Mi"` |  |
 | migrations.backoffLimit | int | `3` |  |
 | migrations.enabled | bool | `true` |  |
 | nameOverride | string | `""` |  |
@@ -78,17 +87,6 @@ Helm Chart to deploy Logto as Auth System
 | oidc.rotate.schedule | string | `"0 0 * * *"` |  |
 | oidc.rotate.type | string | `"ec"` |  |
 | podSecurityContext | object | `{"fsGroup":1000,"runAsGroup":1000,"runAsNonRoot":true,"runAsUser":1000}` | YAML Anchor for PodSecurityContext |
-| postgres.auth.database | string | `"logto"` |  |
-| postgres.auth.password | string | `""` |  |
-| postgres.auth.username | string | `"logto"` |  |
-| postgres.enabled | bool | `false` |  |
-| postgres.fullnameOverride | string | `"lithium-db"` |  |
-| postgres.image.repository | string | `"bitnamilegacy/postgresql"` |  |
-| postgres.primary.persistence.enabled | bool | `false` |  |
-| postgres.resources.limits.cpu | string | `"1"` |  |
-| postgres.resources.limits.memory | string | `"512Mi"` |  |
-| postgres.resources.requests.cpu | string | `"100m"` |  |
-| postgres.resources.requests.memory | string | `"128Mi"` |  |
 | preSetup | object | `{"backoffLimit":3,"enabled":true}` | - Pre-setup and migration Jobs (run before Deployment) |
 | readinessProbe.httpGet.path | string | `"/api/status"` |  |
 | readinessProbe.httpGet.port | string | `"http"` |  |
