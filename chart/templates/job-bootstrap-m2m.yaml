@@ -13,7 +13,8 @@
 # are retrievable, so the chosen secret is honoured — id+secret are deterministic.
 #
 # Idempotent (upsert) and self-ordering: it waits for the role to be seeded
-# (db seed/migrate), so the sync-wave is advisory. SQL targets Logto 1.38 schema.
+# (db seed/migrate), so the sync-wave is advisory. SQL targets the Logto 1.38-1.46 schema
+# (checked on the aldehyde.logto 1.46.0 fork: fresh seed, rerun, secret rotation).
 # ─────────────────────────────────────────────────────────────────────────────
 apiVersion: v1
 kind: ConfigMap
@@ -23,7 +24,7 @@ metadata:
   annotations: {{- include "aldehyde-lithium.annotations" . | nindent 4 }}
 data:
   seed.sql: |
-    -- Logto 1.38 schema: applications / application_secrets / applications_roles
+    -- Logto 1.38-1.46 schema: applications / application_secrets / applications_roles
     insert into applications
       (tenant_id, id, name, secret, description, type,
        oidc_client_metadata, custom_client_metadata, custom_data, is_third_party)

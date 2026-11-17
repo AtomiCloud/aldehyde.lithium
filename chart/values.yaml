@@ -54,9 +54,12 @@ bromine:
 
 # This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/
 image:
-  repository: ghcr.io/logto-io/logto
+  # AtomiCloud fork of Logto OSS (github.com/AtomiCloud/aldehyde.logto): upstream + boot-seed
+  # + page-only "Powered by Logto" removal. The migrate Job uses this tag as the alteration
+  # target, so it MUST be a bare upstream version (X.Y.Z), never sha-<commit>.
+  repository: ghcr.io/atomicloud/aldehyde.logto
   pullPolicy: IfNotPresent
-  tag: 1.38.0
+  tag: 1.46.0
 
 imagePullSecrets: [ ]
 nameOverride: ''
@@ -190,7 +193,7 @@ maindb:
 # every fresh/rebuilt Logto. Default OFF (production can manage this manually).
 #
 # Runs AFTER db seed/migrate (waits for the role to exist), so ordering is safe
-# regardless of sync-wave. The seed SQL targets Logto 1.38's schema
+# regardless of sync-wave. The seed SQL targets Logto's 1.38-1.46 schema
 # (applications / application_secrets / applications_roles) — review on image bump.
 bootstrap:
   enable: false

@@ -6,9 +6,9 @@ tags: &tags
 
 # This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/
 image:
-  repository: ghcr.io/logto-io/logto
+  repository: ghcr.io/atomicloud/aldehyde.logto
   pullPolicy: IfNotPresent
-  tag: '1.38.0'
+  tag: '1.46.0'
 
 imagePullSecrets: [ ]
 nameOverride: ''

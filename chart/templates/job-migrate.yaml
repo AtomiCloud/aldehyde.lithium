@@ -1,4 +1,11 @@
 {{- if .Values.migrations.enabled }}
+{{- /* `alt deploy <target>` runs alterations up to <target>. A suffixed tag such as
+  1.46.0-abc sorts below 1.46.0 in semver, so that version's own alterations would be
+  skipped and core would then refuse to start. Allow bare X.Y.Z only. */}}
+{{- $target := toString .Values.image.tag }}
+{{- if not (regexMatch "^[0-9]+\\.[0-9]+\\.[0-9]+$" $target) }}
+{{- fail (printf "image.tag %q must be a bare Logto version (X.Y.Z): the migrate Job uses it as the alteration target" $target) }}
+{{- end }}
 apiVersion: batch/v1
 kind: Job
 metadata:
