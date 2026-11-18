@@ -1,6 +1,6 @@
 # aldehyde-lithium
 
-![Version: 0.1.3](https://img.shields.io/badge/Version-0.1.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.38.0](https://img.shields.io/badge/AppVersion-1.38.0-informational?style=flat-square)
+![Version: 0.1.3](https://img.shields.io/badge/Version-0.1.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.46.0](https://img.shields.io/badge/AppVersion-1.46.0-informational?style=flat-square)
 
 Helm Chart to deploy Logto as Auth System
 
@@ -50,8 +50,8 @@ Helm Chart to deploy Logto as Auth System
 | bromine.target | string | `"lithium"` |  |
 | fullnameOverride | string | `""` |  |
 | image.pullPolicy | string | `"IfNotPresent"` |  |
-| image.repository | string | `"ghcr.io/logto-io/logto"` |  |
-| image.tag | string | `"1.38.0"` |  |
+| image.repository | string | `"ghcr.io/atomicloud/aldehyde.logto"` |  |
+| image.tag | string | `"1.46.0"` |  |
 | imagePullSecrets | list | `[]` |  |
 | ingress.className | string | `"traefik"` |  |
 | ingress.enabled | bool | `true` |  |
