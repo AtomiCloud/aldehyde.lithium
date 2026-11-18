@@ -1,3 +1,10 @@
+## [1.4.0](https://github.com/AtomiCloud/aldehyde.lithium/compare/v1.3.0...v1.4.0) (2026-11-18)
+
+
+### ✨ Features ✨
+
+* run the aldehyde.logto fork 1.46.0 image ([b18b3e2](https://github.com/AtomiCloud/aldehyde.lithium/commit/b18b3e25b85caebfe4ebb9ccb003b1510e9091a3))
+
 ## [1.3.0](https://github.com/AtomiCloud/aldehyde.lithium/compare/v1.2.0...v1.3.0) (2026-06-11)
 
 
